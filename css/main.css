@@ -1,0 +1,24 @@
+h2{
+	font-size: 100px;
+}
+
+.grid{
+	padding-top: 50px;
+	height: 500px;
+	width: 500px;
+	margin: 0 auto;
+	overflow: visible;
+}
+
+.tic{
+	height: 31.1111%;
+	width: 31.1111%;
+	background-color: #FF8200;
+	display: inline-block;
+	margin: 3px;
+	vertical-align: top;
+	font-size: 9em;
+	border-radius: .2em;
+	text-align: center;
+	box-sizing: border-box;
+}
