@@ -7,16 +7,19 @@ $(document).ready(function(){
         CIRCLE: 2
     };
 
+	//Determine whose turn it is
     var turn = {
         HUMAN: 0,
         COMP: 1
     };
 
+	//Switch for games won/drawn and starting/ongoing
     var state = {
         GAMEON: 0,
         GAMEOVER: 1
     }
 
+	//Score tally
     var score = {
         DRAW: 0,
         HUMAN: 1,
@@ -77,6 +80,7 @@ $(document).ready(function(){
             totTurns = [];
         };
 
+        //Looks for win conditions
         this.checkWinner = function () {
             var win = false;
             for (var i = 0; i < 9; i += 3)
@@ -106,6 +110,7 @@ $(document).ready(function(){
                 totTurns = [2, 4, 6];
                 return (grid[2]);
             }
+			//If no conditions are met and grid is full, end in a draw
             if (this.isFull())
                 return score.DRAW;
             return win;
@@ -116,7 +121,6 @@ $(document).ready(function(){
 
     //AI - determines best move for computer, cannot lose
     var COMP = function (grid) {
-        var whereToGo = [0, 2, 6, 8, 4];
         this.getMove = function () {
             var move = makeMove(grid, grid.comp, 0);
             grid.set(move.x, grid.comp);
@@ -128,12 +132,14 @@ $(document).ready(function(){
         }
 
         var makeMove = function (grid, human, depth) {
+        	//Analyze win conditions for human
             var win = grid.checkWinner();
             if (win !== false) {
                 if (win === grid.human)
                     return { score: depth - 10 };
                 return { score: 10 - depth };
             }
+			//Do nothing if no more moves to make
             if (grid.isFull())
                 return { score: 0 };
             var moves = [];
@@ -151,6 +157,7 @@ $(document).ready(function(){
                     grid.set(i, pieces.EMPTY);
                 }
             }
+			//Depending on win conditions for human player, devise a blocking move, or set up a win for the AI.
             var bestMove = 0;
             if (human === grid.comp) {
                 var bestScore = -100;
@@ -191,7 +198,8 @@ $(document).ready(function(){
              _grid.clear();
              clearDraw();
         }
-
+		
+		//Switch turns after each move is made
         var changePieces = function () {
             for (var i = 0 ; i < 9; i++)
                 if (_grid.get(i) === _grid.comp)
@@ -214,7 +222,8 @@ $(document).ready(function(){
             for (var i = 0; i < 9; i++)
                 updateDraw(i, _grid.get(i));
         }
-
+		
+	//End the game if someone wins or it has ended in a draw
        var checkWinner = function () {
             var win = _grid.checkWinner();
             if (win !== false) {
@@ -226,6 +235,7 @@ $(document).ready(function(){
             }
         }
 
+		//Finish turn for AI, check win conditions
        var update = function () {
             if (_state === state.GAMEON) {
                 if (_turn === turn.COMP) {
@@ -238,6 +248,7 @@ $(document).ready(function(){
             }
         }
 
+		//Begin the match - human goes first
         this.startMatch = function (callback) {
             if (!_init) {
                 _callback = callback;
@@ -260,6 +271,7 @@ $(document).ready(function(){
             update();
         }
 
+		//Place Xs and Os in grid
         var updateDraw = function (x, type) {
             switch (type) {
                 case pieces.EMPTY:
